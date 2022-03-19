@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import edu.nbcc.dao.BookDAO;
+import edu.nbcc.dao.BookDAOImpl;
 import edu.nbcc.model.Book;
 import edu.nbcc.model.BookModel;
 import edu.nbcc.model.ErrorModel;
@@ -47,7 +49,11 @@ public class BookController extends HttpServlet {
 		Book book = new Book();
 		String path = request.getPathInfo();
 		if (path==null) {
-			request.setAttribute("vm", book.getBooks());
+			//request.setAttribute("vm", book.getBooks());
+			
+			BookDAO dao = new BookDAOImpl();
+			List<Book> list = dao.findAll();
+			request.setAttribute("vm", list);
 			setView(request, BOOK_VIEW);
 		}else {
 			String[] parts = path.split("/");

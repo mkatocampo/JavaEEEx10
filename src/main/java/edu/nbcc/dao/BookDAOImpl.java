@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.nbcc.model.Book;
@@ -145,20 +146,81 @@ public class BookDAOImpl implements BookDAO {
 
 	@Override
 	public List<Book> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn = null;
+		PreparedStatement statement = null;
+		List<Book> list = new ArrayList<Book>();
+		try{
+			conn = getConnection();
+			statement = conn.prepareStatement(FIND_ALL);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				Book book = new Book();
+				book.setId(rs.getInt("id"));
+				book.setName(rs.getString("name"));
+				book.setTerm(rs.getInt("term"));
+				book.setPrice(rs.getDouble("price"));
+				list.add(book);
+			}
+		}catch(SQLException e) {
+			System.out.println(e.getMessage());
+			return null;
+		}finally {
+			close(statement);
+			close(conn);
+		}	
+		return list;
 	}
 
 	@Override
 	public Book findByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn = null;
+		PreparedStatement statement = null;
+		try{
+			conn = getConnection();
+			statement = conn.prepareStatement(FIND_BY_NAME);
+			statement.setString(1, name);
+			ResultSet rs = statement.executeQuery();
+			Book book = new Book();
+			if (rs.next()) {
+				book.setId(rs.getInt("id"));
+				book.setName(rs.getString("name"));
+				book.setTerm(rs.getInt("term"));
+				book.setPrice(rs.getDouble("price"));
+			}
+			return book;
+		}catch(SQLException e) {
+			System.out.println(e.getMessage());
+			return null;
+		}finally {
+			close(statement);
+			close(conn);
+		}
 	}
 
 	@Override
 	public Book findById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn = null;
+		PreparedStatement statement = null;
+		try{
+			conn = getConnection();
+			statement = conn.prepareStatement(FIND_BY_ID);
+			statement.setInt(1, id);
+			ResultSet rs = statement.executeQuery();
+			Book book = new Book();
+			if (rs.next()) {
+				book.setId(rs.getInt("id"));
+				book.setName(rs.getString("name"));
+				book.setTerm(rs.getInt("term"));
+				book.setPrice(rs.getDouble("price"));
+			}
+			return book;
+		}catch(SQLException e) {
+			System.out.println(e.getMessage());
+			return null;
+		}finally {
+			close(statement);
+			close(conn);
+		}
 	}
 
 }
