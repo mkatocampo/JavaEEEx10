@@ -21,15 +21,15 @@ import edu.nbcc.model.Book;
 public class BookDAOImpl implements BookDAO {
 
 	//help to connect mysql to java code
-	private static final String DRIVER_NAME = "com.mysql.jdbc.Driver";
-	private static final String DB_URL = "jdbc:mysql://localhost:3000/javaee";
+	private static final String DRIVER_NAME = "com.mysql.jbdc.Driver";
+	private static final String DB_URL = "jbdc:mysql://localhost:3306/javaee";
 	private static final String USER_ID = "dev";
 	private static final String PASSWORD = "dev1234";
 	
 	private static final String DELETE = "DELETE FROM book WHERE id=?";
 	private static final String INSERT = "INSERT INTO book(name, price, term) VALUES (?,?,?)";
 	private static final String UPDATE = "UPDATE book SET name=?, price=?, term=? WHERE id=?";
-	private static final String FIND_ALL = "SELECT * FROM book ORDER BY id=?";
+	private static final String FIND_ALL = "SELECT * FROM book ORDER BY id";
 	private static final String FIND_BY_ID = "SELECT * FROM book WHERE id=?";
 	private static final String FIND_BY_NAME = "SELECT * FROM book WHERE name=?";
 	

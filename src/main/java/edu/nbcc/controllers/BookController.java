@@ -48,10 +48,11 @@ public class BookController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Book book = new Book();
 		String path = request.getPathInfo();
+		BookDAO dao = new BookDAOImpl();
+		
 		if (path==null) {
 			//request.setAttribute("vm", book.getBooks());
-			
-			BookDAO dao = new BookDAOImpl();
+				
 			List<Book> list = dao.findAll();
 			request.setAttribute("vm", list);
 			setView(request, BOOK_VIEW);
@@ -60,7 +61,8 @@ public class BookController extends HttpServlet {
 			if (parts[1].equalsIgnoreCase("create") || ValidationUtil.isNumeric(parts[1])) {
 				int id = ValidationUtil.getInteger(parts[1]);
 				if (id != 0) {
-					Book bk = book.getBook(id);
+					//Book bk = book.getBook(id);
+					Book bk = dao.findById(id);
 					if (bk != null) {
 						BookModel vm = new BookModel();
 						vm.setBook(bk);
@@ -87,6 +89,7 @@ public class BookController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		List <String> errors = new ArrayList<String>();
+		BookDAO dao = new BookDAOImpl();
 		Book book = new Book();
 		setView(request, BOOK_SUMMARY);
 		
@@ -123,12 +126,14 @@ public class BookController extends HttpServlet {
 				
 				switch(action) {
 				case "create":
-					book = book.create();
+					//book = book.create();
+					dao.insert(book);
 					request.setAttribute("createdBook", book);
 					break;
 				
 				case "save":
-					if (book.saveBook() > 0) {
+					int saveId = dao.update(book);
+					if (saveId > 0) {
 						request.setAttribute("savedBook", book);
 					}else {
 						BookModel vm = new BookModel();
@@ -140,7 +145,8 @@ public class BookController extends HttpServlet {
 					break;
 					
 				case "delete":
-					if (book.deleteBook() > 0) {
+					int deleteId = dao.delete(id);
+					if (deleteId > 0) {
 						request.setAttribute("deletedBook", book);
 					}else {
 						BookModel vm = new BookModel();
@@ -164,5 +170,4 @@ public class BookController extends HttpServlet {
 		}
 		getView().forward(request, response);
 	}
-
 }
