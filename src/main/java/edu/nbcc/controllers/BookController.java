@@ -4,12 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import edu.nbcc.dao.BookDAO;
 import edu.nbcc.dao.BookDAOImpl;
 import edu.nbcc.model.Book;
@@ -20,7 +17,7 @@ import edu.nbcc.util.ValidationUtil;
 /**
  * Servlet implementation class test
  */
-public class BookController extends HttpServlet {
+public class BookController extends jakarta.servlet.http.HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String BOOK_VIEW = "/books.jsp";
 	private static final String CREATE_BOOK = "/book.jsp";
@@ -46,6 +43,8 @@ public class BookController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("test");
+		
 		Book book = new Book();
 		String path = request.getPathInfo();
 		BookDAO dao = new BookDAOImpl();
@@ -58,6 +57,7 @@ public class BookController extends HttpServlet {
 			setView(request, BOOK_VIEW);
 		}else {
 			String[] parts = path.split("/");
+			
 			if (parts[1].equalsIgnoreCase("create") || ValidationUtil.isNumeric(parts[1])) {
 				int id = ValidationUtil.getInteger(parts[1]);
 				if (id != 0) {

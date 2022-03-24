@@ -21,8 +21,8 @@ import edu.nbcc.model.Book;
 public class BookDAOImpl implements BookDAO {
 
 	//help to connect mysql to java code
-	private static final String DRIVER_NAME = "com.mysql.jbdc.Driver";
-	private static final String DB_URL = "jbdc:mysql://localhost:3306/javaee";
+	private static final String DRIVER_NAME = "com.mysql.jdbc.Driver";
+	private static final String DB_URL = "jdbc:mysql://localhost:3306/javaee";
 	private static final String USER_ID = "dev";
 	private static final String PASSWORD = "dev1234";
 	
@@ -43,6 +43,7 @@ public class BookDAOImpl implements BookDAO {
 			return DriverManager.getConnection(DB_URL,USER_ID,PASSWORD);
 		}catch(Exception e) {
 			System.out.println(e.getMessage());
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -151,6 +152,7 @@ public class BookDAOImpl implements BookDAO {
 		List<Book> list = new ArrayList<Book>();
 		try{
 			conn = getConnection();
+			System.out.println(conn);
 			statement = conn.prepareStatement(FIND_ALL);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
